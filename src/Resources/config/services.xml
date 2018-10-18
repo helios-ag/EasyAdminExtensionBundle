@@ -4,6 +4,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+
+        <service id="alterphp.easyadmin_extension.twig.extension.easy_admin_extension" class="AlterPHP\EasyAdminExtensionBundle\Twig\EasyAdminExtensionTwigExtension">
+            <argument type="service" id="easyadmin.config.manager" />
+            <argument type="service" id="easyadmin_mongo_odm.config.manager" on-invalid="null" />
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="alterphp.easyadmin_extension.subscriber.post_query_builder" class="AlterPHP\EasyAdminExtensionBundle\EventListener\PostQueryBuilderSubscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
