@@ -47,7 +47,7 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
         }
 
         // Fallback is useful ?
-        return $path;
+        return sprintf('@EasyAdminExtension/%s', $path);
     }
 
     /**

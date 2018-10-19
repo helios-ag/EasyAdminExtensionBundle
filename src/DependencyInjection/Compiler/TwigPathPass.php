@@ -20,7 +20,10 @@ class TwigPathPass implements CompilerPassInterface
         $this->coverNamespace($twigLoaderFilesystemDefinition, 'EasyAdmin', EasyAdminBundle::class);
 
         // CHECK_MONGO_ODM
-        if (class_exists(EasyAdminMongoOdmBundle::class)) {
+        $mongoOdmBundleClassExists = class_exists(EasyAdminMongoOdmBundle::class);
+        $mongoOdmBundleLoaded = in_array(EasyAdminMongoOdmBundle::class, $container->getParameter('kernel.bundles'));
+        $hasEasyAdminMongoOdmBundle = $mongoOdmBundleClassExists && $mongoOdmBundleLoaded;
+        if ($hasEasyAdminMongoOdmBundle) {
             $this->coverNamespace($twigLoaderFilesystemDefinition, 'EasyAdminMongoOdm', EasyAdminMongoOdmBundle::class);
         }
     }
