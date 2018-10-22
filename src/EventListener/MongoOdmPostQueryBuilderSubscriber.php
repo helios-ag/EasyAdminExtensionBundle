@@ -3,7 +3,6 @@
 namespace AlterPHP\EasyAdminExtensionBundle\EventListener;
 
 use AlterPHP\EasyAdminMongoOdmBundle\Event\EasyAdminMongoOdmEvents;
-use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\ODM\MongoDB\Query\Builder as QueryBuilder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
