@@ -29,6 +29,7 @@
         "twig/twig": "~1.26|~2.0"
     },
     "require-dev": {
+        "alterphp/easyadmin-extension-bundle": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "friendsofphp/php-cs-fixer": "^2.11",
         "php-coveralls/php-coveralls": "^2.0",
