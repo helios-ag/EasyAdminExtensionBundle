@@ -6,6 +6,7 @@
     <services>
 
         <service id="alterphp.easyadmin_extension.twig.extension.easy_admin_extension" class="AlterPHP\EasyAdminExtensionBundle\Twig\EasyAdminExtensionTwigExtension">
+            <argument type="service" id="router" />
             <argument type="service" id="easyadmin.config.manager" />
             <argument type="service" id="easyadmin_mongo_odm.config.manager" on-invalid="null" />
             <tag name="twig.extension"/>
@@ -25,6 +26,7 @@
             <argument>%easy_admin_extension.custom_form_types%</argument>
             <!-- Makes it process just before PropertyConfigPass -->
             <tag name="easyadmin.config_pass" priority="41"/>
+            <tag name="easyadmin_mongo_odm.config_pass" priority="41"/>
         </service>
         <service id="alterphp.easyadmin_extension.config_pass.embedded_list_view" class="AlterPHP\EasyAdminExtensionBundle\Configuration\EmbeddedListViewConfigPass">
             <argument>%easy_admin_extension.embedded_list.open_new_tab%</argument>
@@ -49,6 +51,7 @@
         <service id="alterphp.easyadmin_extension.config_pass.list_form_filters" class="AlterPHP\EasyAdminExtensionBundle\Configuration\ListFormFiltersConfigPass">
             <argument type="service" id="doctrine" />
             <tag name="easyadmin.config_pass" priority="0"/>
+            <tag name="easyadmin_mongo_odm.config_pass" priority="0"/>
         </service>
         <service id="alterphp.easyadmin_extension.helper.list_form_filters" class="AlterPHP\EasyAdminExtensionBundle\Helper\ListFormFiltersHelper">
             <argument type="service" id="form.factory"/>

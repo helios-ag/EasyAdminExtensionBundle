@@ -117,7 +117,7 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
                 $entityClass, $entityMetadata->getFieldMapping($filterConfig['property']), $filterConfig
             );
         } elseif ($entityMetadata->hasAssociation($filterConfig['property'])) {
-            $this->configureAssociationFilter(
+            $this->configureEntityAssociationFilter(
                 $entityClass, $entityMetadata->getAssociationMapping($filterConfig['property']), $filterConfig
             );
         }
@@ -157,7 +157,7 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
         }
     }
 
-    private function configureAssociationFilter(string $entityClass, array $associationMapping, array &$filterConfig)
+    private function configureEntityAssociationFilter(string $entityClass, array $associationMapping, array &$filterConfig)
     {
         // To-One (EasyAdminAutocompleteType)
         if ($associationMapping['type'] & ClassMetadataInfo::TO_ONE) {

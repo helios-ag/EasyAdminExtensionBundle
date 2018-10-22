@@ -5,10 +5,8 @@
 # Passer les configPass en mongo_odm
     - EmbeddedListViewConfigPass
     - ExcludeFieldsConfigPass
-    - ListFormFiltersConfigPass
-    - ShortFormTypeConfigPass: OK (use PropertyPath to include [list][form_filters])
+    - ListFormFiltersConfigPass OK
+    - ShortFormTypeConfigPass: OK
     - ShowViewConfigPass
-
-# POST LIST MONGO ODM QUERY BUILDER
 
 # Tests !

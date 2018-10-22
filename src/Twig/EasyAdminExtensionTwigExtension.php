@@ -5,6 +5,7 @@ namespace AlterPHP\EasyAdminExtensionBundle\Twig;
 use AlterPHP\EasyAdminMongoOdmBundle\Configuration\ConfigManager as MongoOdmConfigManager;
 use EasyCorp\Bundle\EasyAdminBundle\Configuration\ConfigManager as EntityConfigManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -12,11 +13,14 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
 {
     private $entityConfigManager;
     private $mongoOdmConfigManager;
+    private $router;
 
-    public function __construct(EntityConfigManager $entityConfigManager, MongoOdmConfigManager $mongoOdmConfigManager = null)
-    {
+    public function __construct(
+        RouterInterface $router, EntityConfigManager $entityConfigManager, MongoOdmConfigManager $mongoOdmConfigManager = null
+    ) {
         $this->entityConfigManager = $entityConfigManager;
         $this->mongoOdmConfigManager = $mongoOdmConfigManager;
+        $this->router = $router;
     }
 
     public function getFunctions()
@@ -25,6 +29,7 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
             new TwigFunction('easyadmin_base_twig_path', array($this, 'getBaseTwigPath')),
             new TwigFunction('easyadmin_object', array($this, 'getObjectConfiguration')),
             new TwigFunction('easyadmin_object_type', array($this, 'getObjectType')),
+            new TwigFunction('easyadmin_path', array($this, 'getEasyAdminPath')),
         );
     }
 
@@ -77,7 +82,7 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
     }
 
     /**
-     * Returns the the given object type.
+     * Returns the given object type.
      *
      * @param Request $request
      *
@@ -100,5 +105,23 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
         }
 
         return null;
+    }
+
+    /**
+     * Returns easyadmin path for given parameters.
+     *
+     * @param array $parameters
+     *
+     * @return string
+     */
+    public function getEasyAdminPath(array $parameters)
+    {
+        if (array_key_exists('entity', $parameters)) {
+            return $this->router->generate('easyadmin', $parameters);
+        } elseif (array_key_exists('document', $parameters)) {
+            return $this->router->generate('easyadmin_mongo_odm', $parameters);
+        }
+
+        throw new \RuntimeException('Parameters must contain either "entity" or "document" key !');
     }
 }

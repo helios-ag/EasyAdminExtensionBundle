@@ -42,8 +42,8 @@ class MongoOdmAdminController extends BaseAdminController
         }
 
         // Get item for edit/show or custom actions => security voters may apply
-        $easyadmin = $this->request->attributes->get('easyadmin');
-        $subject = $easyadmin['item'] ?? null;
+        $easyadminMongoOdm = $this->request->attributes->get('easyadmin_mongo_odm');
+        $subject = $easyadminMongoOdm['item'] ?? null;
         $this->get('alterphp.easyadmin_extension.admin_authorization_checker')->checksUserAccess(
             $this->document, $actionName, $subject
         );

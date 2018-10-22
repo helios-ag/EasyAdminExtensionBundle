@@ -3,4 +3,4 @@
   {% set action_params = action_params|merge({ sortField: sort.field, sortDirection: sort.direction}) %}
 {% endif %}
 
-{{ render(path('easyadmin', action_params)) }}
+{{ render(easyadmin_path(action_params)) }}
