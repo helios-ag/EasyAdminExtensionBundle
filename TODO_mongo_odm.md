@@ -6,7 +6,7 @@
     - EmbeddedListViewConfigPass
     - ExcludeFieldsConfigPass
     - ListFormFiltersConfigPass
-    - ShortFormTypeConfigPass: ON PROGRESS
+    - ShortFormTypeConfigPass: OK (use PropertyPath to include [list][form_filters])
     - ShowViewConfigPass
 
 # POST LIST MONGO ODM QUERY BUILDER

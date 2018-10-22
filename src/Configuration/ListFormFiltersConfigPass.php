@@ -28,24 +28,34 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
      */
     public function process(array $backendConfig): array
     {
-        if (!isset($backendConfig['entities'])) {
-            return $backendConfig;
+        if (isset($backendConfig['entities']) && is_array($backendConfig['entities'])) {
+            $this->processObjectListFormFilters('entity', $backendConfig['entities']);
         }
 
-        foreach ($backendConfig['entities'] as $entityName => $entityConfig) {
-            if (!isset($entityConfig['list']['form_filters'])) {
+        if (isset($backendConfig['documents']) && is_array($backendConfig['documents'])) {
+            $this->processObjectListFormFilters('document', $backendConfig['documents']);
+        }
+
+        return $backendConfig;
+    }
+
+    private function processObjectListFormFilters(string $objectType, array &$objectConfigs)
+    {
+        foreach ($objectConfigs as $objectName => $objectConfig) {
+            if (!isset($objectConfig['list']['form_filters'])) {
                 continue;
             }
 
             $formFilters = array();
 
-            foreach ($entityConfig['list']['form_filters'] as $i => $formFilter) {
+            foreach ($objectConfig['list']['form_filters'] as $i => $formFilter) {
                 // Detects invalid config node
                 if (!is_string($formFilter) && !is_array($formFilter)) {
                     throw new \RuntimeException(
                         sprintf(
-                            'The values of the "form_filters" option for the list view of the "%s" entity can only be strings or arrays.',
-                            $entityConfig['class']
+                            'The values of the "form_filters" option for the list view of the "%s" object of type "%s" can only be strings or arrays.',
+                            $objectConfig['class'],
+                            $objectType
                         )
                     );
                 }
@@ -57,8 +67,9 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
                     if (!array_key_exists('property', $formFilter)) {
                         throw new \RuntimeException(
                             sprintf(
-                                'One of the values of the "form_filters" option for the "list" view of the "%s" entity does not define the mandatory option "property".',
-                                $entityConfig['class']
+                                'One of the values of the "form_filters" option for the "list" view of the "%s" object of type "%s" does not define the mandatory option "property".',
+                                $objectConfig['class'],
+                                $objectType
                             )
                         );
                     }
@@ -66,7 +77,9 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
                     $filterConfig = $formFilter;
                 }
 
-                $this->configureFilter($entityConfig['class'], $filterConfig);
+                if ('entity' === $objectType) {
+                    $this->configureEntityFormFilter($objectConfig['class'], $filterConfig);
+                }
 
                 // If type is not configured at this steps => not guessable
                 if (!isset($filterConfig['type'])) {
@@ -77,13 +90,11 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
             }
 
             // set form filters config and form !
-            $backendConfig['entities'][$entityName]['list']['form_filters'] = $formFilters;
+            $objectConfigs[$objectName]['list']['form_filters'] = $formFilters;
         }
-
-        return $backendConfig;
     }
 
-    private function configureFilter(string $entityClass, array &$filterConfig)
+    private function configureEntityFormFilter(string $entityClass, array &$filterConfig)
     {
         // No need to guess type
         if (isset($filterConfig['type'])) {
@@ -102,7 +113,7 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
         }
 
         if ($entityMetadata->hasField($filterConfig['property'])) {
-            $this->configureFieldFilter(
+            $this->configureEntityPropertyFilter(
                 $entityClass, $entityMetadata->getFieldMapping($filterConfig['property']), $filterConfig
             );
         } elseif ($entityMetadata->hasAssociation($filterConfig['property'])) {
@@ -112,7 +123,7 @@ class ListFormFiltersConfigPass implements ConfigPassInterface
         }
     }
 
-    private function configureFieldFilter(string $entityClass, array $fieldMapping, array &$filterConfig)
+    private function configureEntityPropertyFilter(string $entityClass, array $fieldMapping, array &$filterConfig)
     {
         switch ($fieldMapping['type']) {
             case 'boolean':
