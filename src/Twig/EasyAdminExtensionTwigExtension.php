@@ -46,8 +46,8 @@ class EasyAdminExtensionTwigExtension extends AbstractExtension
             return sprintf('@BaseEasyAdminMongoOdm/%s', $path);
         }
 
-        // Fallback is useful ?
-        return sprintf('@EasyAdminExtension/%s', $path);
+        // Fallback not entity/document admin pages based on EasyAdmin layout ?
+        return sprintf('@BaseEasyAdmin/%s', $path);
     }
 
     /**
